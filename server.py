@@ -29,8 +29,6 @@ def train_and_predict(dataset, x_data, model_type="lstm"):
             x_data_prepared = np.reshape(x_data_prepared, (x_data_prepared.shape[0], 1, 1))
         print("shape of me:", x_train.shape)
         print("shape of you:", x_data_prepared.shape)
-        if x_train.shape != x_data_prepared.shape:
-            raise ValueError("Error Data Type")
         if model_type == 'lstm':
             model = get_lstm_model()
         elif model_type == 'gru':
