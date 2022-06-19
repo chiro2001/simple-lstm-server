@@ -6,6 +6,8 @@ from keras.layers.wrappers import Bidirectional
 from keras.models import Sequential
 from tensorflow.python.keras.optimizer_v2.adam import Adam
 
+from lstm_server.parameters import nb_epoch, batch_size
+
 
 def get_lstm_model(lr=0.001):
     model = Sequential()
@@ -80,3 +82,18 @@ def get_bilstm_model(lr=0.001):
     model.compile(loss='mse', optimizer=adam)
     model.summary()
     return model
+
+
+def train(model, x_train, y_train):
+    history = model.fit(x_train, y_train,
+                        nb_epoch=nb_epoch,
+                        batch_size=batch_size,
+                        validation_split=0.1,
+                        verbose=2)
+    return history
+
+
+def evaluate(model, x_test, y_test):
+    score = model.evaluate(
+        x_test, y_test, batch_size=64, verbose=0)
+    return score
