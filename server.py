@@ -6,6 +6,36 @@ from sklearn.metrics import mean_squared_error
 from lstm_server.models import *
 from lstm_server.data_prepares import *
 
+from werkzeug.wrappers import Request, Response
+from werkzeug.serving import run_simple
+
+from jsonrpc import JSONRPCResponseManager, dispatcher
+
+
+@dispatcher.add_method
+def hello():
+    '''
+    测试的一个rpc方法
+    :return:
+    '''
+    return "this is python test"
+
+
+@Request.application
+def application(request):
+    '''
+     服务的主方法，handle里面的dispatcher就是代理的rpc方法，可以写多个dispatcher
+    :param request:
+    :return:
+    '''
+    response = JSONRPCResponseManager.handle(
+        request.get_data(cache=False, as_text=True), dispatcher)
+    return Response(response.json, mimetype='application/json')
+
+
+if __name__ == '__main__':
+    run_simple('localhost', 9090, application)
+
 
 def main():
     model = get_lstm_model()
