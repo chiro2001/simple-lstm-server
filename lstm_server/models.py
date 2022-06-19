@@ -96,3 +96,7 @@ def evaluate(model, x_test, y_test):
     score = model.evaluate(
         x_test, y_test, batch_size=64, verbose=0)
     return score
+
+
+def predict(model, x_test):
+    return model.predict(x_test, batch_size=64)
