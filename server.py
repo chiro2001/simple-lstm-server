@@ -13,31 +13,28 @@ from jsonrpc import JSONRPCResponseManager, dispatcher
 
 
 @dispatcher.add_method
-def hello():
-    '''
-    测试的一个rpc方法
-    :return:
-    '''
-    return "this is python test"
+def train_and_predict(dataset, x_data, model_type="lstm"):
+    dataset = prepare_data(dataset)
+    x_train, y_train, x_test, y_test = creat_dataset(dataset, test_rate=0)
+    if model_type == 'lstm':
+        model = get_lstm_model()
+    elif model_type == 'gru':
+        model = get_gru_model()
+    else:
+        model = get_bilstm_model()
+    train(model, x_train, y_train)
+    pre = predict(model, x_data)
+    return pre
 
 
 @Request.application
 def application(request):
-    '''
-     服务的主方法，handle里面的dispatcher就是代理的rpc方法，可以写多个dispatcher
-    :param request:
-    :return:
-    '''
     response = JSONRPCResponseManager.handle(
         request.get_data(cache=False, as_text=True), dispatcher)
     return Response(response.json, mimetype='application/json')
 
 
-if __name__ == '__main__':
-    run_simple('localhost', 9090, application)
-
-
-def main():
+def test_local():
     model = get_lstm_model()
     # get_gru_model()
     # get_bilstm_model()
@@ -58,6 +55,10 @@ def main():
     plt.grid(True)
     plt.savefig('kk.png')
     plt.show()
+
+
+def main():
+    run_simple('localhost', 9090, application)
 
 
 if __name__ == '__main__':
