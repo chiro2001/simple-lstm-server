@@ -11,13 +11,13 @@ def creat_dataset(dataset, tw=1, test_rate=0.1, numpy_type=True):
         data_x.append(dataset[i:i + tw])
         data_y.append(dataset[i + tw])
     if numpy_type:
-        return np.asarray(data_x[:int(length * (1 - test_rate))]), \
-               np.asarray(data_y[:int(length * (1 - test_rate))]), \
+        return np.asarray(data_x[:int(length * (1 - test_rate)) + 1]), \
+               np.asarray(data_y[:int(length * (1 - test_rate)) + 1]), \
                np.asarray(data_x[int(length * (1 - test_rate)):]), \
                np.asarray(data_y[int(length * (1 - test_rate)):])
     else:
-        return data_x[:int(length * (1 - test_rate))], \
-               data_y[:int(length * (1 - test_rate))], \
+        return data_x[:int(length * (1 - test_rate)) + 1], \
+               data_y[:int(length * (1 - test_rate)) + 1], \
                data_x[int(length * (1 - test_rate)):], \
                data_y[int(length * (1 - test_rate)):]
 
@@ -40,17 +40,20 @@ def load_local_data(**kwargs):
     return creat_dataset(dataset, **kwargs)
 
 
-g_scaler = None
+g_scaler: MinMaxScaler = None
 
 
-def prepare_data(dataset, numpy_type=True):
+def prepare_data(dataset, numpy_type=True, use_last_scaler=False):
+    global g_scaler
     scaler = MinMaxScaler(feature_range=(0, 1))
     dataset = np.asarray(dataset)
-    dataset_new = scaler.fit_transform(dataset.reshape(-1, 1))
+    length = dataset.shape[0]
+    print("prepare_data: length =", length)
+    dataset_new = (g_scaler if use_last_scaler else scaler).fit_transform(dataset.reshape(-1, 1))
     if not numpy_type:
         dataset_new = dataset_new.tolist()
-    global g_scaler
-    g_scaler = scaler
+    if not use_last_scaler:
+        g_scaler = scaler
     return dataset_new
 
 

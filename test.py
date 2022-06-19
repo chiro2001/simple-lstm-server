@@ -1,7 +1,9 @@
-import requests
-from lstm_server.data_prepares import *
-import json
 import os
+
+import requests
+
+from lstm_server.data_prepares import *
+from server import test_local
 
 
 def main():
@@ -25,4 +27,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # main()
+    test_local()

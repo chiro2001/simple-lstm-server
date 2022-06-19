@@ -1,4 +1,5 @@
 import math
+import traceback
 
 import matplotlib.pyplot as plt
 from sklearn.metrics import mean_squared_error
@@ -20,18 +21,33 @@ def echo(text):
 
 @dispatcher.add_method
 def train_and_predict(dataset, x_data, model_type="lstm"):
-    dataset = prepare_data(dataset)
-    x_train, y_train, x_test, y_test = creat_dataset(dataset, test_rate=0)
-    if model_type == 'lstm':
-        model = get_lstm_model()
-    elif model_type == 'gru':
-        model = get_gru_model()
-    else:
-        model = get_bilstm_model()
-    train(model, x_train, y_train)
-    pre = predict(model, x_data)
-    pre_data = restore_data(pre, numpy_type=False)
-    return pre_data
+    try:
+        dataset = prepare_data(dataset)
+        x_train, y_train, x_test, y_test = creat_dataset(dataset, test_rate=0)
+        x_data_prepared = prepare_data(x_data, use_last_scaler=True)
+        if len(x_data_prepared.shape) == 2:
+            x_data_prepared = np.reshape(x_data_prepared, (x_data_prepared.shape[0], 1, 1))
+        print("shape of me:", x_train.shape)
+        print("shape of you:", x_data_prepared.shape)
+        if x_train.shape != x_data_prepared.shape:
+            raise ValueError("Error Data Type")
+        if model_type == 'lstm':
+            model = get_lstm_model()
+        elif model_type == 'gru':
+            model = get_gru_model()
+        else:
+            model = get_bilstm_model()
+        train(model, x_train, y_train)
+        pre = predict(model, x_data_prepared)
+        pre_data = restore_data(pre, numpy_type=False)
+        return {
+            "data": pre_data
+        }
+    except Exception as e:
+        traceback.print_exc()
+        return {
+            "error": str(e)
+        }
 
 
 @Request.application
@@ -46,6 +62,7 @@ def test_local():
     # get_gru_model()
     # get_bilstm_model()
     x_train, y_train, x_test, y_test = load_local_data()
+    print("shape of you:", x_train.shape)
     history = train(model, x_train, y_train)
     score = evaluate(model, x_test, y_test)
     print(history)
