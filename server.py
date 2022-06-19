@@ -1,5 +1,6 @@
 import math
 
+import matplotlib.pyplot as plt
 from sklearn.metrics import mean_squared_error
 
 from lstm_server.models import *
@@ -20,13 +21,13 @@ def main():
     rmse = math.sqrt(mean_squared_error(y_test, pre))
     print('specific rmse = ', rmse)
 
-    # plt.figure(figsize=(16, 8))
-    # plt.plot(y_test, 'b', label='real')
-    # plt.plot(pre, ls='-.', c='r', label='predict')
-    # plt.legend(loc='best')
-    # plt.grid(True)
-    # plt.savefig('kk.png')
-    # plt.show()
+    plt.figure(figsize=(16, 8))
+    plt.plot(y_test, 'b', label='real')
+    plt.plot(pre, ls='-.', c='r', label='predict')
+    plt.legend(loc='best')
+    plt.grid(True)
+    plt.savefig('kk.png')
+    plt.show()
 
 
 if __name__ == '__main__':

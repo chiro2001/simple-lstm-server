@@ -2,3 +2,4 @@ tensorflow==2.4.0
 keras==2.4.3
 pandas==1.1.5
 sklearn==0.0
+matplotlib==3.3.4
