@@ -1,13 +1,17 @@
 import requests
 from lstm_server.data_prepares import *
+import json
+import os
 
 
 def main():
+    os.environ['http_proxy'] = ""
+    os.environ['https_proxy'] = ""
     url = "http://localhost:9090/jsonrpc"
+    headers = {'content-type': 'application/json'}
     dataset = load_local_dataset(numpy_type=False)
     x_train, y_train, x_test, y_test = load_local_data(numpy_type=False)
 
-    # Example echo method
     payload = {
         "method": "train_and_predict",
         "params": [dataset, x_test],
@@ -15,6 +19,7 @@ def main():
         "id": 0,
     }
     response = requests.post(url, json=payload).json()
+    print(response)
     result = response["result"]
     print(result)
 

@@ -40,10 +40,23 @@ def load_local_data(**kwargs):
     return creat_dataset(dataset, **kwargs)
 
 
+g_scaler = None
+
+
 def prepare_data(dataset, numpy_type=True):
     scaler = MinMaxScaler(feature_range=(0, 1))
     dataset = np.asarray(dataset)
     dataset_new = scaler.fit_transform(dataset.reshape(-1, 1))
     if not numpy_type:
         dataset_new = dataset_new.tolist()
+    global g_scaler
+    g_scaler = scaler
     return dataset_new
+
+
+def restore_data(pre, numpy_type=True):
+    assert g_scaler is not None
+    pre_data = g_scaler.inverse_transform(pre)
+    if not numpy_type:
+        pre_data = pre_data.tolist()
+    return pre_data

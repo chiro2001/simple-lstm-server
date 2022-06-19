@@ -24,7 +24,8 @@ def train_and_predict(dataset, x_data, model_type="lstm"):
         model = get_bilstm_model()
     train(model, x_train, y_train)
     pre = predict(model, x_data)
-    return pre
+    pre_data = restore_data(pre, numpy_type=False)
+    return pre_data
 
 
 @Request.application
@@ -58,7 +59,7 @@ def test_local():
 
 
 def main():
-    run_simple('localhost', 9090, application)
+    run_simple('0.0.0.0', 9090, application)
 
 
 if __name__ == '__main__':
