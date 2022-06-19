@@ -85,12 +85,11 @@ def get_bilstm_model(lr=0.001):
 
 
 def train(model, x_train, y_train):
-    history = model.fit(x_train, y_train,
-                        nb_epoch=nb_epoch,
-                        batch_size=batch_size,
-                        validation_split=0.1,
-                        verbose=2)
-    return history
+    return model.fit(x_train, y_train,
+                     epochs=nb_epoch,
+                     batch_size=batch_size,
+                     validation_split=0.1,
+                     verbose=2)
 
 
 def evaluate(model, x_test, y_test):
