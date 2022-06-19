@@ -13,6 +13,12 @@ from jsonrpc import JSONRPCResponseManager, dispatcher
 
 
 @dispatcher.add_method
+def echo(text):
+    print("echo:", text)
+    return text
+
+
+@dispatcher.add_method
 def train_and_predict(dataset, x_data, model_type="lstm"):
     dataset = prepare_data(dataset)
     x_train, y_train, x_test, y_test = creat_dataset(dataset, test_rate=0)
