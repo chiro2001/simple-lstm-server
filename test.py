@@ -27,5 +27,5 @@ def main():
 
 if __name__ == "__main__":
     # main()
-    test_local()
-    # test_local2()
+    # test_local()
+    test_local2()
