@@ -9,7 +9,7 @@ from tensorflow.python.keras.optimizer_v2.adam import Adam
 from lstm_server.parameters import nb_epoch, batch_size
 
 
-def get_lstm_model(lr=0.001):
+def get_lstm_model(lr=0.001, out=1):
     model = Sequential()
     model.add(LSTM(50, input_shape=(None, 1), return_sequences=True))
     # model.add(Dropout(0.2))
@@ -24,17 +24,17 @@ def get_lstm_model(lr=0.001):
     model.add(Dropout(0.2))
 
     model.add(Dense(100))
-    model.add(Dense(1))
+    model.add(Dense(out))
 
     model.add(Activation('relu'))
-    start = time.time()
+    # start = time.time()
     adam = Adam(lr=lr)
     model.compile(loss='mse', optimizer=adam)
     model.summary()
     return model
 
 
-def get_gru_model(lr=0.001):
+def get_gru_model(lr=0.001, out=1):
     model = Sequential()
     model.add(GRU(50, input_shape=(None, 1), return_sequences=True))
     # model.add(Dropout(0.2))
@@ -49,17 +49,17 @@ def get_gru_model(lr=0.001):
     model.add(Dropout(0.2))
 
     model.add(Dense(200))
-    model.add(Dense(1))
+    model.add(Dense(out))
 
     model.add(Activation('relu'))
-    start = time.time()
+    # start = time.time()
     adam = Adam(lr=lr)
     model.compile(loss='mse', optimizer=adam)
     model.summary()
     return model
 
 
-def get_bilstm_model(lr=0.001):
+def get_bilstm_model(lr=0.001, out=1):
     model = Sequential()
     model.add(LSTM(50, input_shape=(None, 1), return_sequences=True))
     # model.add(Dropout(0.2))
@@ -74,10 +74,10 @@ def get_bilstm_model(lr=0.001):
     model.add(Dropout(0.2))
 
     model.add(Dense(200))
-    model.add(Dense(1))
+    model.add(Dense(out))
 
     model.add(Activation('relu'))
-    start = time.time()
+    # start = time.time()
     adam = Adam(lr=lr)
     model.compile(loss='mse', optimizer=adam)
     model.summary()

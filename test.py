@@ -3,7 +3,7 @@ import os
 import requests
 
 from lstm_server.data_prepares import *
-from server import test_local
+from server import test_local, test_local2
 
 
 def main():
@@ -25,7 +25,7 @@ def main():
     result = response["result"]
     print(result)
 
-
 if __name__ == "__main__":
     # main()
     test_local()
+    # test_local2()
