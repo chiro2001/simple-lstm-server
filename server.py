@@ -42,7 +42,7 @@ def train_and_predict(dataset, x_data, model_type="lstm"):
         pre = predict(model, x_data_prepared)
         pre_data = restore_data(pre, numpy_type=False)
         return {
-            "data": pre_data
+            "data": np.array(pre_data).reshape(len(pre_data)).tolist()
         }
     except Exception as e:
         traceback.print_exc()
@@ -74,10 +74,19 @@ def test_local():
     print('specific rmse = ', rmse)
 
     plt.figure(figsize=(16, 8))
+    
+    plt.subplot(221)
     plt.plot(y_test, 'b', label='real')
-    plt.plot(pre, ls='-.', c='r', label='predict')
+    plt.plot(pre[1:], ls='-.', c='r', label='predict')
     plt.legend(loc='best')
     plt.grid(True)
+    
+    plt.subplot(222)
+    plt.plot(restore_data(y_test), 'b', label='real')
+    plt.plot(restore_data(pre[1:]), ls='-.', c='r', label='predict')
+    plt.legend(loc='best')
+    plt.grid(True)
+    
     plt.savefig('kk.png')
     plt.show()
 

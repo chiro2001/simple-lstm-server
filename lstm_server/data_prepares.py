@@ -22,10 +22,13 @@ def creat_dataset(dataset, tw=1, test_rate=0.1, numpy_type=True):
                data_y[int(length * (1 - test_rate)):]
 
 
-def load_local_dataset(numpy_type=True):
+def load_local_dataset(numpy_type=True, data_index=5):
     dataframe = pd.read_csv('data.csv',
                             header=0, parse_dates=[0],
-                            index_col=0, usecols=[0, 5], squeeze=True)
+                            index_col=0, 
+                            usecols=[0, data_index], 
+                            squeeze=True)
+    print(dataframe)
     dataset = dataframe.values
     if not numpy_type:
         dataset = dataset.tolist()
